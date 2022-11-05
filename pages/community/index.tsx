@@ -1,18 +1,31 @@
-import type { NextPage } from "next";
+import type {NextPage} from "next";
+import Layout from "../../components/layout/layout";
+import {Button} from "../../components/atom";
+import Link from "next/link";
+import {useRouter} from "next/router";
 
 const Community: NextPage = () => {
+    const router = useRouter();
+    const onClick = () => {
+        return router.push("/community/create");
+    }
     return (
-        <div className={"py-16 px-4 space-y-8"}>
-            {[1,2,3,4,5].map((_,i)=>( <div key={i} className={"flex flex-col cursor-pointer items-start"}>
-                    <span className={"flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"}>동네질문</span>
-                    <div className={"mt-2 text-gray-700"}>
-                        <span className={"text-orange-500 font-medium"}>Q.</span> 근처에 테니스 배울곳 있나요??
-                    </div>
-                    <div className={"mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs"}>
-                        <span>니꼬</span>
-                        <span>18시간 전</span>
-                    </div>
-                    <div className={"flex space-x-5 mt-3 text-gray-700 py-2.5 border-b-[2px] border-t w-full"}>
+        <Layout title={"동네생활"} isTabBar>
+            <div className={"space-y-1 divide-y-[2px]"}>
+                {[1, 2, 3, 4, 5].map((_, i) => (
+                    <Link key={i} legacyBehavior href={`/community/${i}`}>
+                        <a key={i} className={"flex flex-col cursor-pointer items-start pt-4"}>
+                        <span
+                            className={"flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"}>동네질문</span>
+                            <div className={"mt-2 text-gray-700"}>
+                                <span className={"text-orange-500 font-medium"}>Q.</span> 근처에 테니스 배울곳 있나요??
+                            </div>
+                            <div
+                                className={"mt-5 flex items-center justify-between w-full text-gray-500 font-medium text-xs"}>
+                                <span>투썸광인</span>
+                                <span>10시간 전</span>
+                            </div>
+                            <div className={"flex space-x-5 mt-3 text-gray-700 py-2.5 border-t w-full"}>
                       <span className={"flex space-x-2 items-center text-sm"}>
                         <svg
                             className="w-4 h-4"
@@ -30,7 +43,7 @@ const Community: NextPage = () => {
                         </svg>
                         <span>궁금해요 1</span>
                       </span>
-                        <span className={"flex space-x-2 items-center text-sm"}>
+                                <span className={"flex space-x-2 items-center text-sm"}>
                         <svg
                             className="w-4 h-4"
                             fill="none"
@@ -47,27 +60,28 @@ const Community: NextPage = () => {
                         </svg>
                         <span>답변 1</span>
                       </span>
-                    </div>
-                </div>)
-            )}
-
-            <button className={"fixed text-white bottom-20 right-5 transition-colors bg-emerald-600 p-5 shadow-xl rounded-full hover:bg-emerald-700 cursor-pointer"}>
-                <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    ></path>
-                </svg>
-            </button>
-        </div>
+                            </div>
+                        </a>
+                    </Link>
+                    ))}
+                <Button buttonType={"float"} clickHandler={onClick}>
+                    <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        ></path>
+                    </svg>
+                </Button>
+            </div>
+        </Layout>
     );
 };
 
