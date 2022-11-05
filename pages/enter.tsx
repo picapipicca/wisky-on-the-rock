@@ -28,6 +28,22 @@ const Enter: NextPage = () => {
                     </div>
                 </div>
                 <form className={"flex flex-col mt-8 space-y-3"}>
+                    {/* 니꼬씨꺼 : {method === "email" ? (*/}
+                    {/*    <Input name="email" label="Email address" type="email" required />*/}
+                    {/*) : null}*/}
+                    {/*{method === "phone" ? (*/}
+                    {/*    <Input*/}
+                    {/*        name="phone"*/}
+                    {/*        label="Phone number"*/}
+                    {/*        type="number"*/}
+                    {/*        kind="phone"*/}
+                    {/*        required*/}
+                    {/*    />*/}
+                    {/*) : null}*/}
+                    {/*{method === "email" ? <Button text={"Get login link"} /> : null}*/}
+                    {/*{method === "phone" ? (*/}
+                    {/*    <Button text={"Get one-time password"} />*/}
+                    {/*) : null}*/}
                     <label htmlFor={"login-input"} className={"text-sm font-medium text-gray-700"}>
                         {method === "email" ? "Email address" : null}
                         {method === "phone" ? "Phone number" : null}
