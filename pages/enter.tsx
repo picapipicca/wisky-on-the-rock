@@ -1,23 +1,30 @@
-import { useState } from "react";
+import {useState} from "react";
 import {cls} from "../libraries/utils";
 import {NextPage} from "next";
 import {Button} from "../components/atom";
 
-//TODO enter input 정리
-const Enter:NextPage=()=> {
+//TODO enter input 정리 Button Input 에 맞게
+
+const Enter: NextPage = () => {
     const [method, setMethod] = useState<"email" | "phone">("email");
     const onEmailClick = () => setMethod("email");
     const onPhoneClick = () => setMethod("phone");
 
     return (
         <div className={"mt-16 px-4"}>
-            <h3 className={"text-3xl font-bold text-center"}>JUGO the Cat, market</h3>
+            <h3 className={"text-3xl font-bold text-center"}>= Temp. name = </h3>
             <div className={"mt-8"}>
                 <div className={"flex flex-col items-center"}>
-                    <h5 className="text-sm text-gray-500">로그인:</h5>
+                    <h5 className="text-sm text-gray-500">로그인</h5>
                     <div className={"grid grid-cols-2 w-full border-b gap-16 mt-8"}>
-                        <button className={cls("border-b-2 pb-4 font-medium", method === "email" ? "text-green-700 border-green-600" :"border-transparent text-gray-500" )} onClick={onEmailClick}>Email</button>
-                        <button className={cls("border-b-2 pb-4 font-medium", method === "phone" ? "text-green-700 border-green-600" :"border-transparent text-gray-500" )} onClick={onPhoneClick}>Phone</button>
+                        <button
+                            className={cls("border-b-2 pb-4 font-medium", method === "email" ? "text-green-700 border-green-600" : "border-transparent text-gray-500")}
+                            onClick={onEmailClick}>Email
+                        </button>
+                        <button
+                            className={cls("border-b-2 pb-4 font-medium", method === "phone" ? "text-green-700 border-green-600" : "border-transparent text-gray-500")}
+                            onClick={onPhoneClick}>Phone
+                        </button>
                     </div>
                 </div>
                 <form className={"flex flex-col mt-8 space-y-3"}>
@@ -26,11 +33,15 @@ const Enter:NextPage=()=> {
                         {method === "phone" ? "Phone number" : null}
                     </label>
                     <div className={"mt-1"}>
-                        {method === "email" ? <input id="login-input" className="appearance-none rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-700 focus:border-green-700 w-full px-3 py-2 border border-gray-300" type="email" required /> : null}
+                        {method === "email" ? <input id="login-input"
+                                                     className="appearance-none rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-700 focus:border-green-700 w-full px-3 py-2 border border-gray-300"
+                                                     type="email" required/> : null}
                         {method === "phone" ? (
                             <div className={"flex rounded-md shadow-sm"}>
-                                <span className={"flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm"}>+82</span>
-                                <input id="login-input" type="number" required className="appearance-none rounded-l-none rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-700 focus:border-green-700 w-full px-3 py-2 border border-gray-300"/>
+                                <span
+                                    className={"flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm"}>+82</span>
+                                <input id="login-input" type="number" required
+                                       className="appearance-none rounded-l-none rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-700 focus:border-green-700 w-full px-3 py-2 border border-gray-300"/>
                             </div>
                         ) : null}
                     </div>
@@ -54,7 +65,8 @@ const Enter:NextPage=()=> {
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                             >
-                                <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                                <path
+                                    d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
                             </svg>
                         </Button>
                         <Button buttonType={"login"}>
