@@ -1,23 +1,36 @@
 import client from "@libraries/server/client";
-import viewHandler from "@libraries/server/viewHandler";
+import viewHandler, { ResponseType } from "@libraries/server/viewHandler";
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-
 //upsert :bring data from database ,mainly used at update or create data
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) => {
   const { phoneNum, email } = req.body;
-  const payload = phoneNum ? { phoneNum: +phoneNum } : { email };
-  const user = await client.user.upsert({
-    where: {
-      ...payload,
+  const user = phoneNum ? { phoneNum: +phoneNum } : email ? { email } : null;
+
+  if (!user) return res.status(400).json({ ok: false });
+
+  const payload = Math.floor(100000 + Math.random() * 900000) + "";
+  const token = await client.token.create({
+    data: {
+      payload,
+      user: {
+        connectOrCreate: {
+          where: {
+            ...user,
+          },
+          create: {
+            name: "익명",
+            ...user,
+          },
+        },
+      },
     },
-    create: {
-      name: "익명",
-      ...payload,
-    },
-    update: {},
   });
-  console.log(user);
+
+  console.log(token);
   // if (email) {
   //   user = await client.user.findUnique({
   //     where: { email },
@@ -55,7 +68,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   }
   //   console.log(user);
   // }
-  return res.status(200).end();
+
+  return res.json({
+    ok: true,
+  });
 };
 
 export default viewHandler("POST", handler);
