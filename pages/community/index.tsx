@@ -1,6 +1,6 @@
 import type {NextPage} from "next";
-import Layout from "../../components/layout/layout";
-import {Button} from "../../components/atom";
+import Layout from "@components/layout/layout";
+import {Button} from "@components/atom";
 import Link from "next/link";
 import {useRouter} from "next/router";
 

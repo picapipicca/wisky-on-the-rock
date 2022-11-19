@@ -1,5 +1,5 @@
 import type {NextPage} from "next";
-import {Button, Input, Textarea} from "../../components/atom";
+import {Button, Input, Textarea} from "@components/atom";
 
 const Create: NextPage = () => {
     return (
