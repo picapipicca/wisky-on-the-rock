@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
@@ -13,11 +13,21 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  phoneNum Int? @unique
-  email String? @unique
+  id        Int      @id @default(autoincrement())
+  name      String
+  phoneNum  Int?     @unique
+  email     String?  @unique
   avatarUrl String?
+  regDate   DateTime @default(now())
+  modDate   DateTime @updatedAt
+  tokens    Token[]
+}
+
+model Token {
+  id      Int      @id @default(autoincrement())
+  payload String   @unique
+  user    User     @relation(fields: [userId], references: [id])
   regDate DateTime @default(now())
   modDate DateTime @updatedAt
+  userId  Int
 }
