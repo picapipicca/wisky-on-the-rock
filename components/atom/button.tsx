@@ -4,7 +4,7 @@ interface ButtonProps {
     buttonType?: string;
     children?: string | number | ReactNode;
     clickHandler?: (...args:any) => void;
-    isDisabled?: boolean;
+    [key: string]: any;
 }
 
 const buttonTypeObj: { [key: string]: string } = {
@@ -13,14 +13,14 @@ const buttonTypeObj: { [key: string]: string } = {
     "icon": "p-2.5 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 rounded-md",
     "float": "fixed text-white bottom-24 right-5 transition-colors bg-emerald-600 p-5 shadow-xl rounded-full hover:bg-emerald-700 cursor-pointer",
 }
-const Button = ({isDisabled = false, clickHandler, buttonType = "default", children}: ButtonProps) => {
+
+const Button = ({clickHandler, buttonType = "default", children}: ButtonProps) => {
     return (
         <button
-            className={`transition-button no-underline disabled:opacity-30
+            className={`transition-button no-underline
 				${buttonTypeObj[buttonType]}`}
             type="button"
             onClick={clickHandler}
-            disabled={isDisabled}
         >
                 {children}
         </button>

@@ -1,5 +1,5 @@
 import React,{ReactNode} from "react";
-import {cls} from "../../libraries/utils";
+import {cls} from "@libraries/client/utils";
 import Link from "next/link";
 import {useRouter} from "next/router";
 

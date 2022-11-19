@@ -1,4 +1,4 @@
-import {cls} from "../libraries/utils";
+import {cls} from "@libraries/client/utils";
 
 interface MessageProps {
     reversed?: boolean
