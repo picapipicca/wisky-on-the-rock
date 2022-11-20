@@ -1,7 +1,11 @@
 import client from "@libraries/server/client";
 import viewHandler, { ResponseType } from "@libraries/server/viewHandler";
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-//upsert :bring data from database ,mainly used at update or create data
+import twilio from "twilio";
+import mail from "@sendgrid/mail";
+
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+mail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 const handler = async (
   req: NextApiRequest,
@@ -30,7 +34,24 @@ const handler = async (
     },
   });
 
-  console.log(token);
+  if (phoneNum) {
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: process.env.MESSAGING_SERVICE_SID,
+    //   to: process.env.MY_PHONE_NUMBER!,
+    //   body: `1회용 비밀번호는 ${payload} 입니다.`,
+    // });
+  } else if (email) {
+    // const email = mail.send({
+    //   to: "haewon0910@naver.com", // Change to your recipient
+    //   from: "haewon09106@gmail.com", // Change to your verified sender
+    //   subject: "위스키 온더락 이메일 인증 입니다",
+    //   text: `이메일 인증번호를 정확히 입력해주세요. ${payload}`,
+    //   html: `<strong>이메일 인증 번호를 정확히 입력해주세요 ${payload}</strong>`,
+    // });
+    // console.log(email);
+  }
+
+  //upsert :bring data from database ,mainly used at update or create data
   // if (email) {
   //   user = await client.user.findUnique({
   //     where: { email },
