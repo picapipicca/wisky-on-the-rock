@@ -1,14 +1,16 @@
 //return type 은 2개의 item 이 있는 array [function, object] = useMutation(url)
 import { useState } from "react";
 
-interface useMutationProps {
+interface useMutationProps<T> {
   isLoading: boolean;
-  data?: object;
+  data?: T;
   error?: object;
 }
 
-const useMutation = (url: string): [(data: any) => void, useMutationProps] => {
-  const [state, setState] = useState<useMutationProps>({
+type useMutationResults<T> = [(data: any) => void, useMutationProps<T>];
+
+const useMutation = <T = any>(url: string): useMutationResults<T> => {
+  const [state, setState] = useState<useMutationProps<T>>({
     isLoading: false,
     error: undefined,
     data: undefined,
