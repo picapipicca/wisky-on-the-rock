@@ -15,7 +15,7 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  phoneNum  Int?     @unique
+  phoneNum  BigInt?     @unique
   email     String?  @unique
   avatarUrl String?
   regDate   DateTime @default(now())
@@ -26,7 +26,7 @@ model User {
 model Token {
   id      Int      @id @default(autoincrement())
   payload String   @unique
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id],onDelete: Cascade)
   regDate DateTime @default(now())
   modDate DateTime @updatedAt
   userId  Int
