@@ -9,11 +9,27 @@ interface LoginForm {
   email?: string;
   phoneNum?: string;
 }
+interface TokenForm {
+  confirmToken: string;
+}
+
+interface LoginMutationProps {
+  ok: boolean;
+}
 
 const Enter: NextPage = () => {
-  //login function , POST 결과 데이터 return 값
-  const [login, { isLoading, data, error }] = useMutation("/api/users/login");
   const [method, setMethod] = useState<"email" | "phoneNum">("email");
+  const { register, handleSubmit, reset } = useForm<LoginForm>();
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+    useForm<TokenForm>();
+
+  //login function , POST 결과 데이터 return 값
+  const [login, { isLoading, data, error }] =
+    useMutation<LoginMutationProps>("/api/users/login");
+
+  const [confirmToken, { isLoading: tokenIsLoading, data: tokenData }] =
+    useMutation<LoginMutationProps>("/api/users/confirm");
+
   const onEmailClick = () => {
     reset();
     setMethod("email");
@@ -22,78 +38,106 @@ const Enter: NextPage = () => {
     reset();
     setMethod("phoneNum");
   };
-  const { register, handleSubmit, reset } = useForm<LoginForm>();
 
   const onValid: SubmitHandler<LoginForm> = (data) => {
     if (isLoading) return;
     login(data);
   };
+  const onTokenValid: SubmitHandler<TokenForm> = (data) => {
+    if (tokenIsLoading) return;
+    confirmToken(data);
+  };
+
+  console.log("::::data:::::", data);
   return (
     <div className={"mt-16 px-4"}>
       <h3 className={"text-3xl font-bold text-center"}>= Temp. name = </h3>
       <div className={"mt-8"}>
-        <div className={"flex flex-col items-center"}>
-          <h5 className="text-sm text-gray-500">로그인</h5>
-          <div className={"grid grid-cols-2 w-full border-b gap-16 mt-8"}>
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "email"
-                  ? "text-green-700 border-green-600"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onEmailClick}
-            >
-              Email
-            </button>
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "phoneNum"
-                  ? "text-green-700 border-green-600"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onPhoneClick}
-            >
-              Phone
-            </button>
-          </div>
-        </div>
-
-        <form
-          onSubmit={handleSubmit(onValid)}
-          className={"flex flex-col mt-8 space-y-4"}
-        >
-          {method === "email" ? (
+        {data?.ok ? (
+          <form
+            onSubmit={tokenHandleSubmit(onTokenValid)}
+            className={"flex flex-col mt-8 space-y-4"}
+          >
             <Input
-              register={register("email")}
-              isRequired
-              type="email"
-              outerLabel="이메일"
-              name="login-email"
-            />
-          ) : null}
-          {method === "phoneNum" ? (
-            <Input
-              register={register("phoneNum")}
+              register={tokenRegister("confirmToken", { required: true })}
               isRequired
               type="number"
-              outerLabel="휴대폰 번호"
-              name="login-phone"
-              leftInnerLabel="+82"
+              outerLabel="인증번호 입력"
+              name="confirmToken"
             />
-          ) : null}
+            <Button clickHandler={tokenHandleSubmit(onTokenValid)}>
+              {tokenIsLoading ? "...Loading" : "로그인하기"}
+            </Button>
+          </form>
+        ) : (
+          <>
+            <div className={"flex flex-col items-center"}>
+              <h5 className="text-sm text-gray-500">로그인</h5>
+              <div className={"grid grid-cols-2 w-full border-b gap-16 mt-8"}>
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "email"
+                      ? "text-green-700 border-green-600"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onEmailClick}
+                >
+                  Email
+                </button>
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "phoneNum"
+                      ? "text-green-700 border-green-600"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onPhoneClick}
+                >
+                  Phone
+                </button>
+              </div>
+            </div>
+            <form
+              onSubmit={handleSubmit(onValid)}
+              className={"flex flex-col mt-8 space-y-4"}
+            >
+              {method === "email" ? (
+                <Input
+                  register={register("email", {
+                    required: "필수 입력칸 입니다",
+                  })}
+                  isRequired
+                  type="email"
+                  outerLabel="이메일"
+                  name="login-email"
+                />
+              ) : null}
+              {method === "phoneNum" ? (
+                <Input
+                  register={register("phoneNum", {
+                    required: "필수 입력칸 입니다",
+                  })}
+                  isRequired
+                  type="number"
+                  outerLabel="휴대폰 번호"
+                  name="login-phone"
+                  leftInnerLabel="+82"
+                />
+              ) : null}
 
-          <Button clickHandler={handleSubmit(onValid)}>
-            {isLoading
-              ? "Loading..."
-              : method === "email"
-              ? "이메일로 로그인 링크 전송"
-              : method === "phoneNum"
-              ? "메세지로 1회용 비밀번호 전송"
-              : null}
-          </Button>
-        </form>
+              <Button clickHandler={handleSubmit(onValid)}>
+                {isLoading
+                  ? "Loading..."
+                  : method === "email"
+                  ? "이메일로 로그인 링크 전송"
+                  : method === "phoneNum"
+                  ? "메세지로 1회용 비밀번호 전송"
+                  : null}
+              </Button>
+            </form>
+          </>
+        )}
 
         <div className={"mt-8"}>
           <div className={"relative"}>
