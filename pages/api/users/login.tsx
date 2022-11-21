@@ -12,7 +12,7 @@ const handler = async (
   res: NextApiResponse<ResponseType>
 ) => {
   const { phoneNum, email } = req.body;
-  const user = phoneNum ? { phoneNum: +phoneNum } : email ? { email } : null;
+  const user = phoneNum ? { phoneNum } : email ? { email } : null;
 
   if (!user) return res.status(400).json({ ok: false });
 
