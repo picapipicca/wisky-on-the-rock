@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { Input, Button } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useMutation from "@libraries/client/useMutation";
 import { cls } from "@libraries/client/utils";
+import { useRouter } from "next/router";
 
 interface LoginForm {
   email?: string;
@@ -18,6 +19,7 @@ interface LoginMutationProps {
 }
 
 const Enter: NextPage = () => {
+  const router = useRouter();
   const [method, setMethod] = useState<"email" | "phoneNum">("email");
   const { register, handleSubmit, reset } = useForm<LoginForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
@@ -47,6 +49,12 @@ const Enter: NextPage = () => {
     if (tokenIsLoading) return;
     confirmToken(data);
   };
+
+  useEffect(() => {
+    if (tokenData?.ok) {
+      router.push("/");
+    }
+  }, [tokenData, router]);
 
   console.log("::::data:::::", data);
   return (
