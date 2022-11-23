@@ -21,6 +21,11 @@ model User {
   regDate   DateTime @default(now())
   modDate   DateTime @updatedAt
   tokens    Token[]
+  items     Item[]
+  likes     Like[]
+  posts     Post[]
+  comments Comment[]
+  sameQuestions SameQuestion[]
 }
 
 model Token {
@@ -31,3 +36,58 @@ model Token {
   modDate DateTime @updatedAt
   userId  Int
 }
+
+model Item {
+  id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  imageUrl String
+  name String
+  description String @db.MediumText
+  price Int
+  likes Like[]
+}
+
+model Like {
+  id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+}
+
+ model Post {
+ id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  question String @db.MediumText
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  comments Comment[]
+  sameQuestions SameQuestion[]
+ }
+
+ model Comment {
+ id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  comment String @db.MediumText
+ }
+
+ model SameQuestion {
+  id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+ }
