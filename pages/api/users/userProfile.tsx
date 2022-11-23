@@ -1,7 +1,7 @@
 import client from "@libraries/server/client";
 import viewHandler, { ResponseType } from "@libraries/server/viewHandler";
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import { withApiSession } from "@libraries/server/sessionHandler";
+import { withApiSession } from "@libraries/server/sessionLayout";
 
 const handler = async (
   req: NextApiRequest,
@@ -18,4 +18,6 @@ const handler = async (
   });
 };
 
-export default withApiSession(viewHandler("GET", handler));
+export default withApiSession(
+  viewHandler({ methods: ["GET"], handler, isLoggedIn: true })
+);
