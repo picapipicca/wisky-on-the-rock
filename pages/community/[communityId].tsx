@@ -1,8 +1,13 @@
 import type {NextPage} from "next";
 import Layout from "@components/layout/layout";
 import {Button, Textarea} from "@components/atom";
+import { useForm, SubmitHandler } from "react-hook-form";
 
+interface PostCommentProps {
+    comment:string;
+}
 const CommunityPostDetail: NextPage = () => {
+
     return (
         <Layout goBackHandler>
             <div>
@@ -87,7 +92,7 @@ const CommunityPostDetail: NextPage = () => {
                     </div>
                 </div>
                 <div className="px-4">
-                    <Textarea rows={4} placeholder="답변을 기다리고 있어요!"/>
+                    <Textarea regitser={register("comment")} rows={4} placeholder="답변을 기다리고 있어요!"/>
                     <Button>댓글작성</Button>
                 </div>
             </div>
