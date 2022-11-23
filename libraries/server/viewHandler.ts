@@ -4,19 +4,29 @@ export interface ResponseType {
   ok: boolean;
   [key: string]: any;
 }
+type method = "GET" | "POST" | "DELETE";
 
-const viewHandler = (
-  method: "GET" | "POST" | "DELETE",
-  handlerFn: NextApiHandler
-): NextApiHandler => {
+interface ConfigProps {
+  methods: method[];
+  handler: NextApiHandler;
+  isLoggedIn?: boolean;
+}
+
+const viewHandler = ({
+  methods,
+  isLoggedIn = true,
+  handler,
+}: ConfigProps): NextApiHandler => {
   return async (req, res) => {
-    if (req.method !== method) {
+    if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
+    if (isLoggedIn && !req.session.user) {
+      return res.status(401).json({ ok: false });
+    }
     try {
-      await handlerFn(req, res);
+      await handler(req, res);
     } catch (error) {
-      console.log(error);
       return res.status(500).json({ error });
     }
   };

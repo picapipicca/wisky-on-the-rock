@@ -95,4 +95,4 @@ const handler = async (
   });
 };
 
-export default viewHandler("POST", handler);
+export default viewHandler({ methods: ["POST"], handler, isLoggedIn: false });
