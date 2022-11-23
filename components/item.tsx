@@ -9,7 +9,7 @@ interface ItemProps {
 }
 
 
-const Item = ({title, price, id, commentsNum, likeNum}: ItemProps )=> {
+const ItemLayout = ({title, price, id, commentsNum, likeNum}: ItemProps )=> {
     return (
         <Link legacyBehavior href={`/items/${id}`}>
             <a className="flex px-4 py-4 cursor-pointer justify-between">
@@ -62,4 +62,4 @@ const Item = ({title, price, id, commentsNum, likeNum}: ItemProps )=> {
 
 };
 
-export default Item;
+export default ItemLayout;
