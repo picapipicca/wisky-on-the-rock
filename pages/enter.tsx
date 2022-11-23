@@ -56,7 +56,6 @@ const Enter: NextPage = () => {
     }
   }, [tokenData, router]);
 
-  console.log("::::data:::::", data);
   return (
     <div className={"mt-16 px-4"}>
       <h3 className={"text-3xl font-bold text-center"}>= Temp. name = </h3>
@@ -71,7 +70,6 @@ const Enter: NextPage = () => {
               isRequired
               type="number"
               outerLabel="인증번호 입력"
-              name="confirmToken"
             />
             <Button clickHandler={tokenHandleSubmit(onTokenValid)}>
               {tokenIsLoading ? "...Loading" : "로그인하기"}
@@ -118,7 +116,6 @@ const Enter: NextPage = () => {
                   isRequired
                   type="email"
                   outerLabel="이메일"
-                  name="login-email"
                 />
               ) : null}
               {method === "phoneNum" ? (
@@ -129,7 +126,6 @@ const Enter: NextPage = () => {
                   isRequired
                   type="number"
                   outerLabel="휴대폰 번호"
-                  name="login-phone"
                   leftInnerLabel="+82"
                 />
               ) : null}
