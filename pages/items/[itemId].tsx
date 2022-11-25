@@ -54,7 +54,7 @@ const ItemDetail: NextPage = () => {
                 <a
                   className={"text-xs cursor-pointer font-medium text-gray-500"}
                 >
-                  View profile &rarr;
+                 프로필 보기 &rarr;
                 </a>
               </Link>
             </div>
