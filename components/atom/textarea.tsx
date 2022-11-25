@@ -7,7 +7,7 @@ interface TextAreaProps {
   rows?: number;
   register: UseFormRegisterReturn;
   isRequired?: boolean;
-  error:any;
+  error?:any;
 }
 
 const Textarea = ({
@@ -18,7 +18,7 @@ const Textarea = ({
   rows = 4,
   error
 }: TextAreaProps) => {
-  console.log(error)
+
   return (
     <div>
       {label && (
@@ -37,7 +37,7 @@ const Textarea = ({
         placeholder={placeholder}
         required={isRequired}
       />
-      <span className="text-red-500 font-semibold text-sm">{error[register.name]?.message}</span>
+      <span className="text-red-500 text-sm">{error && error[register.name]?.message}</span>
     </div>
   );
 };
