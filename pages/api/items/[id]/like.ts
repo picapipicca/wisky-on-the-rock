@@ -11,7 +11,16 @@ const handler = async (
     query: { id },
     session: { user },
   } = req;
-
+  const item = await client.item.findUnique({
+    where: {
+      id: Number(id),
+    },
+    select: {
+      id: true,
+    },
+  });
+  if(!item) return res.status(404);
+  
   const isAlreadyLike = await client.like.findFirst({
     where: {
       itemId: Number(id),
