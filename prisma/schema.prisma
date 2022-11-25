@@ -67,6 +67,7 @@ model Like {
   question String @db.MediumText
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
+  title String
   comments Comment[]
   sameQuestions SameQuestion[]
  }
