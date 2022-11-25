@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Item } from "@prisma/client";
+
 interface ItemResponseWithLikeProps extends Item {
   _count: {
     likes: number;
