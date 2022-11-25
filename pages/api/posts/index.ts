@@ -10,33 +10,15 @@ const handler = async (
   //   const { name, price, description } = req.body;
   //   const { user } = req.session;
 
-  if (req.method === "GET") {
-    const items = await client.item.findMany({
-      include: {
-        _count: {
-          select: {
-            likes: true,
-          },
-        },
-      },
-    });
-    res.json({
-      ok: true,
-      items,
-    });
-  }
-
   if (req.method === "POST") {
     const {
-      body: { name, price, description },
+      body: { title, question },
       session: { user },
     } = req;
-    const item = await client.item.create({
+    const post = await client.post.create({
       data: {
-        name,
-        price: +price,
-        description,
-        imageUrl: "xxx",
+        title,
+        question,
         user: {
           connect: {
             id: user?.id,
@@ -46,11 +28,9 @@ const handler = async (
     });
     res.json({
       ok: true,
-      item,
+      post,
     });
   }
 };
 
-export default withApiSession(
-  viewHandler({ methods: ["POST", "GET"], handler })
-);
+export default withApiSession(viewHandler({ methods: ["POST"], handler }));
