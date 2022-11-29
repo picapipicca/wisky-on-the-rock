@@ -18,12 +18,16 @@ const handler = async (
   }
   if (req.method === "POST") {
     const {
-      body: { email, phoneNum },
+      body: { email, phoneNum, name },
       session: { user },
     } = req;
-    console.log(req.body)
-    if (email) {
-      const isUserEmail = Boolean(
+    const aboutCurrentUser = await client.user.findUnique({
+      where: {
+        id: user?.id,
+      },
+    });
+    if (email && email !== aboutCurrentUser?.email) {
+      const isEmailAlreadyTaken = Boolean(
         await client.user.findUnique({
           where: {
             email,
@@ -33,7 +37,7 @@ const handler = async (
           },
         })
       );
-      if (isUserEmail) {
+      if (isEmailAlreadyTaken) {
         res.json({
           ok: false,
           error: "이 이메일은 이미 사용중인 이메일입니다.",
@@ -41,10 +45,11 @@ const handler = async (
       }
       await client.user.update({
         where: { id: user?.id },
-        data: email,
+        data: { email },
       });
       res.json({ ok: true });
-    } else if (phoneNum) {
+    }
+    if (phoneNum && phoneNum !== aboutCurrentUser?.phoneNum) {
       const isUserPhone = Boolean(
         await client.user.findUnique({
           where: {
@@ -65,10 +70,21 @@ const handler = async (
         where: {
           id: user?.id,
         },
-        data: phoneNum,
+        data: { phoneNum },
       });
-      res.json({ok:true})
+      res.json({ ok: true });
     }
+    if (name) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: { name },
+      });
+    }
+    res.json({
+      ok: true,
+    });
   }
 };
 
