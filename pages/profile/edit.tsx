@@ -1,16 +1,18 @@
 import type { NextPage } from "next";
+import { useEffect,useState } from "react";
 import Layout from "@components/layout/layout";
 import { Button, Input } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useUser from "../../libraries/client/useUser";
-import { useEffect } from "react";
 import useMutation from "../../libraries/client/useMutation";
-import { stringify } from "querystring";
+
+
 interface EditProfileReponseProps {
   ok: boolean;
   error: string;
 }
 interface EditProfileFormProps {
+  avatarUrl?: FileList;
   name?: string;
   email?: string;
   phoneNum?: string;
@@ -18,21 +20,21 @@ interface EditProfileFormProps {
 }
 const EditProfile: NextPage = () => {
   const { user } = useUser();
+  const [previewAvatar,setPreviewAvatar] = useState("")
   const {
     register,
     handleSubmit,
     setValue,
     setError,
+    watch,
     formState: { errors },
   } = useForm<EditProfileFormProps>();
 
   useEffect(() => {
     if (user) {
-      Object.entries(user).forEach(
-        ([name, value]: [name: any, value: any]) => {
-          setValue(name, value);
-        }
-      );
+      Object.entries(user).forEach(([name, value]: [name: any, value: any]) => {
+        setValue(name, value);
+      });
     }
     // if (user?.email) {
     //   setValue("email", user?.email);
@@ -44,7 +46,7 @@ const EditProfile: NextPage = () => {
     //   setValue("name", user.name);
     // }
   }, [user, setValue]);
-
+  const watchAvatar = watch("avatarUrl");
   const [changeUserProfile, { isLoading, data }] =
     useMutation<EditProfileReponseProps>("/api/users/profile");
 
@@ -62,12 +64,19 @@ const EditProfile: NextPage = () => {
       setError("errorForm", { message: data.error });
     }
   }, [data, setError]);
+  useEffect(()=>{
+    if(watchAvatar && watchAvatar.length !== 0){
+      console.log(watchAvatar)
+      const file = watchAvatar[0];
+      setPreviewAvatar(URL.createObjectURL(file));
+    }
+  },[watchAvatar])
 
   return (
     <Layout goBackHandler>
       <form onSubmit={handleSubmit(onValid)} className={"px-4 space-y-4"}>
         <div className={"flex items-center space-x-6"}>
-          <div className={"w-20 h-20 rounded-full bg-slate-200"} />
+          {previewAvatar ? <img src={previewAvatar} className={"w-20 h-20 rounded-full bg-slate-200"} /> :<div className={"w-20 h-20 rounded-full bg-slate-200"} /> }
           <label
             htmlFor={"profile-img"}
             className={
@@ -76,6 +85,7 @@ const EditProfile: NextPage = () => {
           >
             프로필 변경
             <input
+              {...register("avatarUrl")}
               id="profile-img"
               type={"file"}
               className={"hidden"}
