@@ -15,7 +15,7 @@ interface InputProps {
 //TODO : OuterLabel 위치 손보기 input components 에 고정? 밖으로 뺄것인지?
 const Input = ({
   type = "text",
-  isRequired = false,
+  isRequired,
   leftInnerLabel,
   rightInnerLabel,
   placeholder,

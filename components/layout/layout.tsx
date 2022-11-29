@@ -85,7 +85,7 @@ const Layout = ({children, title, goBackHandler, isTabBar}: LayoutProps) => {
                             <span>채팅</span>
                         </a>
                     </Link>
-                    <Link legacyBehavior href={"/stream"}>
+                    <Link legacyBehavior href={"/streams"}>
                         <a
                             className={cls(
                                 "flex flex-col items-center space-y-2 ",
