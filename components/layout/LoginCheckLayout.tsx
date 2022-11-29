@@ -1,8 +1,8 @@
 import useUser from "@libraries/client/useUser";
 
-const LoginCheck = () => {
+const LoginCheckLayout = () => {
      useUser();
     return null;
 };
 
-export default LoginCheck;
+export default LoginCheckLayout;
