@@ -4,26 +4,64 @@ import { Button, Input } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useUser from "../../libraries/client/useUser";
 import { useEffect } from "react";
-
-interface EditProfileProps {
+import useMutation from "../../libraries/client/useMutation";
+import { stringify } from "querystring";
+interface EditProfileReponseProps {
+  ok: boolean;
+  error: string;
+}
+interface EditProfileFormProps {
+  name?: string;
   email?: string;
   phoneNum?: string;
+  errorForm?: string;
 }
 const EditProfile: NextPage = () => {
   const { user } = useUser();
-  const { register, handleSubmit, setValue } = useForm<EditProfileProps>();
-
-  const onValid: SubmitHandler<EditProfileProps> = (data) => {
-    console.log(data)
-  };
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<EditProfileFormProps>();
 
   useEffect(() => {
-    if (user?.email) {
-      setValue("email", user?.email);
-    } else if (user?.phoneNum) {
-      setValue("phoneNum", user.phoneNum);
+    if (user) {
+      Object.entries(user).forEach(
+        ([name, value]: [name: any, value: any]) => {
+          setValue(name, value);
+        }
+      );
     }
-  }, [user,setValue]);
+    // if (user?.email) {
+    //   setValue("email", user?.email);
+    // }
+    // if (user?.phoneNum) {
+    //   setValue("phoneNum", user.phoneNum);
+    // }
+    // if (user?.name) {
+    //   setValue("name", user.name);
+    // }
+  }, [user, setValue]);
+
+  const [changeUserProfile, { isLoading, data }] =
+    useMutation<EditProfileReponseProps>("/api/users/profile");
+
+  const onValid: SubmitHandler<EditProfileFormProps> = (data) => {
+    if (isLoading) return;
+    if (data.email === "" && data.phoneNum === "" && data.name === "") {
+      return setError("errorForm", {
+        message: "이메일과 휴대폰 번호 중 하나는 필수로 입력해주세요.",
+      });
+    }
+    changeUserProfile(data);
+  };
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("errorForm", { message: data.error });
+    }
+  }, [data, setError]);
 
   return (
     <Layout goBackHandler>
@@ -45,22 +83,25 @@ const EditProfile: NextPage = () => {
             />
           </label>
         </div>
-        <Input outerLabel={"이메일"} register={register("email")} />
+        <Input outerLabel={"이름"} register={register("name")} type="text" />
+        <Input
+          outerLabel={"이메일"}
+          register={register("email")}
+          type="email"
+        />
         <Input
           outerLabel={"휴대폰번호"}
           register={register("phoneNum")}
+          type="number"
         />
-
-        {/*<div className={"mt-1"}>*/}
-        {/*    <div className={"flex rounded-md shadow-sm"}>*/}
-        {/*        <span*/}
-        {/*            className={"flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm"}></span>*/}
-        {/*        <input id="login-input" type="number" required*/}
-        {/*               className="appearance-none rounded-l-none rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-700 focus:border-green-700 w-full px-3 py-2 border border-gray-300"/>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
-
-        <Button clickHandler={handleSubmit(onValid)}>프로필 업데이트</Button>
+        {errors.errorForm ? (
+          <span className="my-2 text-red-500 font-medium text-center block">
+            {errors.errorForm.message}
+          </span>
+        ) : null}
+        <Button clickHandler={handleSubmit(onValid)}>
+          {isLoading ? "...Loading..." : "프로필 업데이트"}
+        </Button>
       </form>
     </Layout>
   );
