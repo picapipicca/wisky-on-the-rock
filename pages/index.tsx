@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Item } from "@prisma/client";
 
-interface ItemResponseWithLikeProps extends Item {
+export interface ItemResponseWithLikeProps extends Item {
   _count: {
     likes: number;
   };
@@ -35,7 +35,6 @@ const Home: NextPage = () => {
             title={item.name}
             price={item.price}
             id={item.id}
-            commentsNum={2}
             likeNum={item?._count.likes}
           />
         ))}

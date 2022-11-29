@@ -5,7 +5,8 @@ import { Button, Input, Textarea } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useMutation from "@libraries/client/useMutation";
 import { Post } from "@prisma/client";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import useCoords from "../../libraries/client/useCoords";
 
 interface PostCreateProps {
   title: string;
@@ -18,25 +19,25 @@ interface PostCreateResponseProps {
 }
 
 const Create: NextPage = () => {
-    const router = useRouter()
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<PostCreateProps>();
+  const { longitude, latitude } = useCoords();
   const [post, { isLoading, data }] =
     useMutation<PostCreateResponseProps>("/api/posts");
-
   const onValid: SubmitHandler<PostCreateProps> = (data) => {
     if (isLoading) return;
-    post(data);
+    post({ ...data, latitude, longitude });
   };
-  console.log("::::post::::",data);
   useEffect(() => {
-    if(data && data.ok){
-        router.push(`/community/${data.post.id}`)
+    if (data && data.ok) {
+      router.push(`/community/${data.post.id}`);
     }
-  }, [data,router]);
+  }, [data, router]);
+
   return (
     <Layout goBackHandler title="당신이 궁금한 동네생활은 무엇인가요?">
       <form

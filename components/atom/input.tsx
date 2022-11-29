@@ -23,7 +23,6 @@ const Input = ({
   register,
   error,
 }: InputProps) => {
-   
   return (
     <div>
       {outerLabel && (
@@ -69,7 +68,11 @@ const Input = ({
           </div>
         )}
       </div>
-      <span className="text-red-500 font-semibold text-sm">{error[register.name]?.message}</span>
+      {error && (
+        <span className="text-red-500 font-semibold text-sm">
+          {error[register.name]?.message}
+        </span>
+      )}
     </div>
   );
 };

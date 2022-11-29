@@ -12,6 +12,7 @@ const handler = async (
     session: { user },
     body: { comment },
   } = req;
+  console.log(comment)
   const post = await client.post.findUnique({
     where: {
       id: Number(id),
@@ -35,7 +36,8 @@ const handler = async (
           id: Number(id),
         },
       },
-      comment,
+      comment:comment,
+      
     },
   });
   console.log(newComment);

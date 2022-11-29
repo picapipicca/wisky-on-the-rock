@@ -74,6 +74,9 @@ const CommunityPostDetail: NextPage = () => {
       sameQuestion({});
     }
   };
+
+  //TODO regDate ㅇㅡㄹ findUnique ㅎㅐ서 id로 찾아와서 가져오기!~!
+  console.log(data?.post.comments)
   const onValid: SubmitHandler<PostCommentProps> = (data) => {
     if (commentsIsLoading) return;
     sendComment(data);
@@ -81,8 +84,9 @@ const CommunityPostDetail: NextPage = () => {
   useEffect(() => {
     if (commentsData && commentsData.ok) {
       reset();
+      mutate();
     }
-  }, [commentsData, reset]);
+  }, [commentsData, reset, mutate]);
 
   return (
     <Layout goBackHandler>
@@ -179,7 +183,8 @@ const CommunityPostDetail: NextPage = () => {
                   {comment.user.name}
                 </span>
                 <span className="text-xs text-gray-500 block ">
-                  {new Date(comment.regDate).toString()}
+                  
+                  {String(comment.regDate)}
                 </span>
                 <p className="text-gray-700 mt-2">{comment.comment}</p>
               </div>

@@ -22,10 +22,15 @@ model User {
   modDate   DateTime @updatedAt
   tokens    Token[]
   items     Item[]
-  likes     Like[]
   posts     Post[]
   comments Comment[]
   sameQuestions SameQuestion[]
+  writtenReviews Review[] @relation(name:"writtenReviews")
+  receivedReviews Review[] @relation(name:"receivedReviews")
+  purchase Purchase[]
+  sell Sell[]
+  likes     Like[]
+  record Record[]
 }
 
 model Token {
@@ -48,6 +53,9 @@ model Item {
   description String @db.MediumText
   price Int
   likes Like[]
+  purchase Purchase[]
+  sell Sell[]
+  record Record[]
 }
 
 model Like {
@@ -58,6 +66,7 @@ model Like {
   userId Int
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId Int
+  
 }
 
  model Post {
@@ -70,6 +79,8 @@ model Like {
   title String
   comments Comment[]
   sameQuestions SameQuestion[]
+  longitude Float?
+  latitude Float?
  }
 
  model Comment {
@@ -92,3 +103,52 @@ model Like {
    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
  }
+
+  model Review {
+    id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  writtenBy User @relation(name:"writtenReviews" , fields: [writtenById],references: [id], onDelete: Cascade)
+  writtenById Int
+  writtenAt User @relation(name:"receivedReviews" , fields: [writtenAtId],references: [id], onDelete: Cascade)
+  writtenAtId Int
+  review String @db.MediumText
+  rate Int @default(1)
+  }
+
+  model Purchase {
+  id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+}
+
+model Sell {
+   id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+}
+
+model Record {
+   id      Int      @id @default(autoincrement())
+  regDate DateTime @default(now())
+  modDate DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+  kind Kind
+}
+
+enum Kind {
+  Purchase
+  Like
+  Sell
+}

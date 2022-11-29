@@ -7,17 +7,27 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) => {
-  console.log(req.session.user);
-  const profile = await client.user.findUnique({
-    where: { id: req.session.user?.id },
+  const {
+    session: { user },
+  } = req;
+  const review = await client.review.findMany({
+    where: {
+      writtenAtId: user?.id,
+    },
+    include: {
+      writtenBy: {
+        select: {
+          id: true,
+          name: true,
+          avatarUrl: true,
+        },
+      },
+    },
   });
-  console.log(profile);
   res.json({
     ok: true,
-    profile,
+    review,
   });
 };
 
-export default withApiSession(
-  viewHandler({ methods: ["GET"], handler, isLoggedIn: true })
-);
+export default withApiSession(viewHandler({ methods: ["GET"], handler }));

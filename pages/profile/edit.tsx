@@ -2,16 +2,29 @@ import type { NextPage } from "next";
 import Layout from "@components/layout/layout";
 import { Button, Input } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
+import useUser from "../../libraries/client/useUser";
+import { useEffect } from "react";
+
 interface EditProfileProps {
-  email: string;
-  phoneNum: string;
+  email?: string;
+  phoneNum?: string;
 }
 const EditProfile: NextPage = () => {
-  const { register, handleSubmit } = useForm<EditProfileProps>();
+  const { user } = useUser();
+  const { register, handleSubmit, setValue } = useForm<EditProfileProps>();
 
   const onValid: SubmitHandler<EditProfileProps> = (data) => {
-    //console.log(data)
+    console.log(data)
   };
+
+  useEffect(() => {
+    if (user?.email) {
+      setValue("email", user?.email);
+    } else if (user?.phoneNum) {
+      setValue("phoneNum", user.phoneNum);
+    }
+  }, [user,setValue]);
+
   return (
     <Layout goBackHandler>
       <form onSubmit={handleSubmit(onValid)} className={"px-4 space-y-4"}>
@@ -32,10 +45,9 @@ const EditProfile: NextPage = () => {
             />
           </label>
         </div>
-        <Input outerLabel={"이메일"} isRequired register={register("email")} />
+        <Input outerLabel={"이메일"} register={register("email")} />
         <Input
           outerLabel={"휴대폰번호"}
-          isRequired
           register={register("phoneNum")}
         />
 

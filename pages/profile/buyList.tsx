@@ -4,7 +4,7 @@ import ProductList from "@components/productList";
 
 const BuyList: NextPage = () => {
     return (
-        <Layout goBackHandler>
+        <Layout goBackHandler title="구매내역">
             <div className={"flex flex-col space-y-1 divide-y-[1px]"}>
             <ProductList type={"purchases"}/>
             </div>
