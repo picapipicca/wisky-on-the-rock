@@ -34,7 +34,7 @@ const handler = async (
     const item = await client.item.create({
       data: {
         name,
-        price: +price,
+        price,
         description,
         imageUrl: "xxx",
         user: {

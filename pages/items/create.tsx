@@ -63,13 +63,11 @@ const Create: NextPage = () => {
         </div>
         <Input
           register={register("name", { required: "입력칸이 비었습니다!" })}
-          name={"product-name"}
           outerLabel={"상품명"}
           isRequired
         />
         <Input
-          register={register("price", { required: "입력칸이 비었습니다!" })}
-          name="price"
+          register={register("price", { required: "입력칸이 비었습니다!" , valueAsNumber:true})}
           outerLabel={"가격"}
           isRequired
           rightInnerLabel={"원"}
@@ -79,7 +77,6 @@ const Create: NextPage = () => {
           register={register("description", {
             required: "입력칸이 비었습니다!",
           })}
-          name={"description"}
           label={"설명"}
           isRequired
         />
