@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
-import LoginCheck from '../components/layout/LoginCheck';
+import LoginCheckLayout from '../components/layout/LoginCheckLayout';
 
 export default function App({ Component, pageProps }: AppProps) {
   
@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
       // max-w-lg: 512px / xs: 320px / sm: 384px / xl: 576px
     <SWRConfig value={{fetcher:(url: string) => fetch(url).then((res) => res.json())}}>
       <div className={"w-full max-w-xl mx-auto"}>
-        <LoginCheck/>
+        <LoginCheckLayout/>
         <Component {...pageProps} />
       </div>
     </SWRConfig>
