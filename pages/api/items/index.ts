@@ -28,7 +28,7 @@ const handler = async (
 
   if (req.method === "POST") {
     const {
-      body: { name, price, description },
+      body: { name, price, description,itemPhotoId },
       session: { user },
     } = req;
     const item = await client.item.create({
@@ -36,7 +36,7 @@ const handler = async (
         name,
         price,
         description,
-        imageUrl: "xxx",
+        imageUrl: itemPhotoId,
         user: {
           connect: {
             id: user?.id,
