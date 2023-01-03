@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { Button, Input, Textarea } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Layout from "@components/layout/layout";
@@ -18,20 +18,41 @@ interface createItemProps {
   name: string;
   price: number;
   description: string;
+  itemPhoto:FileList;
 }
 const Create: NextPage = () => {
+
   const router = useRouter();
-  const { register, handleSubmit } = useForm<createItemProps>();
+  const { register, handleSubmit,watch } = useForm<createItemProps>();
   const [createItem, { isLoading, data }] =
     useMutation<createItemMutationProps>("/api/items");
-  const onValid: SubmitHandler<createItemProps> = (data) => {
+  const itemPhoto = watch("itemPhoto");
+  const [itemPhotoPreview,setItemPhotoPreview]= useState("");
+console.log(data);
+  const onValid: SubmitHandler<createItemProps> = async ({name,price,description,itemPhoto}) => {
     if (isLoading) return;
-    createItem(data);
+    if(itemPhoto && itemPhoto.length > 0){
+      const {uploadURL} = await (await (fetch(`/api/upload`))).json();
+      const form = new FormData();
+      form.append("file",itemPhoto[0],name);
+      const {result:{id}} = await (await fetch(uploadURL,{
+        method:"POST",
+        body:form
+      })).json();
+      createItem({name,price,description,itemPhotoId:id});
+    } else { createItem({name,price,description});}
+   
   };
 
+useEffect(()=>{
+  if(itemPhoto && itemPhoto.length>0){
+    const file = itemPhoto[0];
+    setItemPhotoPreview(URL.createObjectURL(file));
+  }
+},[itemPhoto])
   useEffect(() => {
     if (data?.ok) {
-      router.push(`/items/${data.item.id}`);
+      router.replace(`/item/${data.item.id}`);
     }
   }, [data, router]);
 
@@ -39,7 +60,10 @@ const Create: NextPage = () => {
     <Layout goBackHandler title="업로드">
       <form onSubmit={handleSubmit(onValid)} className={"px-4 space-y-5 py-10"}>
         <div>
-          <label
+         {itemPhotoPreview ? <img src={itemPhotoPreview} className={
+              "w-full h-48 rounded-md mb-3 text-gray-600 "
+            }/> : 
+         <label
             className={
               "cursor-pointer w-full flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md mb-3 text-gray-600 hover:text-orange-500 hover:border-orange-500"
             }
@@ -58,8 +82,8 @@ const Create: NextPage = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <input type="file" className={"hidden"} />
-          </label>
+            <input {...register("itemPhoto")} type="file" id="itemPhoto" accept="image/*" className={"hidden"} />
+          </label>}
         </div>
         <Input
           register={register("name", { required: "입력칸이 비었습니다!" })}

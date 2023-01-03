@@ -35,6 +35,7 @@ const EditProfile: NextPage = () => {
       Object.entries(user).forEach(([name, value]: [name: any, value: any]) => {
         setValue(name, value);
       });
+      if(user?.avatarUrl) setPreviewAvatar(`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${user.avatarUrl}/avatar`)
     }
     // if (user?.email) {
     //   setValue("email", user?.email);
@@ -46,18 +47,30 @@ const EditProfile: NextPage = () => {
     //   setValue("name", user.name);
     // }
   }, [user, setValue]);
-  const watchAvatar = watch("avatarUrl");
+  const avatarUrl = watch("avatarUrl");
   const [changeUserProfile, { isLoading, data }] =
     useMutation<EditProfileReponseProps>("/api/users/profile");
 
-  const onValid: SubmitHandler<EditProfileFormProps> = (data) => {
+  const onValid: SubmitHandler<EditProfileFormProps> = async ({email,phoneNum,name,avatarUrl}) => {
     if (isLoading) return;
-    if (data.email === "" && data.phoneNum === "" && data.name === "") {
+    if (email === "" && phoneNum === "" && name === "") {
       return setError("errorForm", {
         message: "이메일과 휴대폰 번호 중 하나는 필수로 입력해주세요.",
       });
     }
-    changeUserProfile(data);
+    if(avatarUrl && avatarUrl.length >0 && user){
+      const {uploadURL} = await (await fetch(`/api/upload`)).json();
+      const form = new FormData();
+
+      form.append("file",avatarUrl[0],user?.id+"");
+      const {result:{id}} = await (await fetch(uploadURL,{
+        method:"POST",
+        body:form,
+      })).json();
+      
+      changeUserProfile({email,phoneNum,name,avatarId : id});
+    }else{changeUserProfile({email,phoneNum,name});}
+    
   };
   useEffect(() => {
     if (data && !data.ok && data.error) {
@@ -65,12 +78,11 @@ const EditProfile: NextPage = () => {
     }
   }, [data, setError]);
   useEffect(()=>{
-    if(watchAvatar && watchAvatar.length !== 0){
-      console.log(watchAvatar)
-      const file = watchAvatar[0];
-      setPreviewAvatar(URL.createObjectURL(file));
+    if(avatarUrl && avatarUrl.length > 0){
+      const file = avatarUrl[0];
+      !user?.avatarUrl && setPreviewAvatar(URL.createObjectURL(file));
     }
-  },[watchAvatar])
+  },[avatarUrl])
 
   return (
     <Layout goBackHandler>

@@ -25,7 +25,7 @@ const Profile: NextPage = () => {
     <Layout title={"프로필"} isTabBar>
       <div className="px-4">
         <div className={"flex items-center space-x-4"}>
-          <div className={"w-16 h-16 bg-slate-300 rounded-full"} />
+         {user?.avatarUrl? <img src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${user.avatarUrl}/avatar`} className={"w-16 h-16 bg-slate-300 rounded-full"} />:<div className={"w-16 h-16 bg-slate-300 rounded-full"}/>}
           <div className={"flex flex-col"}>
             <span className={"font-medium text-gray-900"}>{user?.name}</span>
             <Link legacyBehavior href="/profile/edit">
