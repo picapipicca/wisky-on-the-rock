@@ -30,17 +30,13 @@ const handler = async (
         },
       },
     },
-    // include: {
-    //   user: {
-    //     select: {
-    //       id: true,
-    //       name: true,
-    //       avatarUrl: true,
-    //     },
-    //   },
-    // },
+  
   });
-
+  const isMe = stream?.userId === user?.id
+  if(stream && !isMe){
+    stream.cloudFlareKey = "unknown";
+    stream.cloudFlareUrl = "unknown"
+  }
   res.json({ ok: true, stream });
   if (!stream) {
     res.status(404).json({ ok: false });
