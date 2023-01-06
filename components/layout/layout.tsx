@@ -68,7 +68,7 @@ const Layout = ({children, title, goBackHandler, isTabBar}: LayoutProps) => {
                             </svg>
                             <span>동네생활</span>
                         </a></Link>
-                    <Link legacyBehavior href={"/chats"}>
+                    <Link legacyBehavior href={"/chat"}>
                         <a
                             className={cls(
                                 "flex flex-col items-center space-y-2 ",
@@ -85,7 +85,7 @@ const Layout = ({children, title, goBackHandler, isTabBar}: LayoutProps) => {
                             <span>채팅</span>
                         </a>
                     </Link>
-                    <Link legacyBehavior href={"/streams"}>
+                    <Link legacyBehavior href={"/stream"}>
                         <a
                             className={cls(
                                 "flex flex-col items-center space-y-2 ",
