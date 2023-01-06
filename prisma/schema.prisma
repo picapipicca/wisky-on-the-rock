@@ -29,7 +29,7 @@ model User {
   receivedReviews Review[] @relation(name:"receivedReviews")
   purchase Purchase[]
   sell Sell[]
-  likes     Like[]
+  likes Like[]
   record Record[]
   streams Stream[]
   chats Chat[]
@@ -42,6 +42,8 @@ model Token {
   regDate DateTime @default(now())
   modDate DateTime @updatedAt
   userId  Int
+
+  @@index([userId])
 }
 
 model Item {
@@ -58,6 +60,8 @@ model Item {
   purchase Purchase[]
   sell Sell[]
   record Record[]
+
+  @@index([userId])
 }
 
 model Like {
@@ -69,7 +73,12 @@ model Like {
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId Int
   
+
+  @@index([userId])
+  @@index([itemId])
 }
+
+
 
  model Post {
   id      Int      @id @default(autoincrement())
@@ -83,7 +92,9 @@ model Like {
   sameQuestions SameQuestion[]
   longitude Float?
   latitude Float?
- }
+ 
+  @@index([userId])
+}
 
  model Comment {
   id      Int      @id @default(autoincrement())
@@ -94,7 +105,10 @@ model Like {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
   comment String @db.MediumText
- }
+ 
+  @@index([userId])
+  @@index([postId])
+}
 
  model SameQuestion {
   id      Int      @id @default(autoincrement())
@@ -104,7 +118,10 @@ model Like {
   userId  Int
    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
- }
+ 
+  @@index([userId])
+  @@index([postId])
+}
 
   model Review {
   id      Int      @id @default(autoincrement())
@@ -116,7 +133,10 @@ model Like {
   writtenAtId Int
   review String @db.MediumText
   rate Int @default(1)
-  }
+  
+  @@index([writtenById])
+  @@index([writtenAtId])
+}
 
   model Purchase {
   id      Int      @id @default(autoincrement())
@@ -126,6 +146,9 @@ model Like {
   userId Int
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId Int
+
+  @@index([userId])
+  @@index([itemId])
 }
 
 model Sell {
@@ -136,6 +159,9 @@ model Sell {
   userId Int
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId Int
+
+  @@index([userId])
+  @@index([itemId])
 }
 
 model Record {
@@ -147,6 +173,9 @@ model Record {
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId Int
   kind Kind
+
+  @@index([userId])
+  @@index([itemId])
 }
 
 enum Kind {
@@ -165,6 +194,11 @@ model Stream{
   description String @db.MediumText
   price Int
   chats Chat[]
+  cloudFlareUrl String @default("")
+  cloudFlareKey String @default("")
+  cloudFlareId String @default("")
+
+  @@index([userId])
 }
 
 model Chat {
@@ -176,4 +210,7 @@ model Chat {
   message String @db.MediumText
   stream Stream @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId Int
+
+  @@index([userId])
+  @@index([streamId])
 }
