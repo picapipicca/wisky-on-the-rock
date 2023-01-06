@@ -23,12 +23,11 @@ const StreamCreate: NextPage = () => {
   const [createStream, { data, isLoading }] = useMutation<StreamResponseProps>("/api/streams");
   const onValid: SubmitHandler<StreamFormProps> = (data) => {
     if (isLoading) return;
-    console.log(data);
     createStream(data);
   };
   useEffect(()=>{
     if(data && data.ok){
-      router.push(`/streams/${data.stream.id}`)
+      router.push(`/stream/${data.stream.id}`)
     }
   },[data,router])
   return (

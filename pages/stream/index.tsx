@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { useEffect } from "react";
 import { Stream } from "@prisma/client";
 import streams from "pages/api/streams";
+import Image from "next/image";
 
 interface LiveListResponseProps {
   ok: boolean;
@@ -19,22 +20,25 @@ const Streams: NextPage = () => {
       return;
     }
   }, [data]);
+  
   return (
     <Layout title={"라이브"} isTabBar>
       <div className={"space-y-4 divide-y-2 pb-4"}>
         {data?.streams?.map((stream) => (
-          <Link legacyBehavior href={`/streams/${stream.id}`} key={stream.id}>
+          <Link legacyBehavior href={`/stream/${stream.id}`} key={stream.id}>
             <a className={"pt-4 px-4"}>
-              <div
-                className={
-                  "w-full rounded-md shadow-sm bg-slate-300 aspect-video"
-                }
+              <div  className={"w-full relative overflow-hidden rounded-md shadow-sm bg-slate-300 aspect-video"}> 
+              <Image
+               src={`https://videodelivery.net/${stream?.cloudFlareId}/thumnails/thumnail.jpg?height=320`}
+               fill
+               alt="thumnails"
               />
+              </div>
               <h3 className={"text-gray-700 text-lg font-bold mt-2"}>{stream.name}</h3>
             </a>
           </Link>
         ))}
-        <Link legacyBehavior href={"/streams/create"}>
+        <Link legacyBehavior href={"/stream/create"}>
           <a>
             <Button buttonType={"float"}>
               <svg
