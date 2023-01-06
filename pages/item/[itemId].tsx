@@ -7,6 +7,8 @@ import { Item, User } from "@prisma/client";
 import useMutation from "@libraries/client/useMutation";
 import { cls } from "@libraries/client/utils";
 import useUser from "../../libraries/client/useUser";
+import Image from "next/image";
+
 
 //mutate: bound(지금화면에서 데이터 변경), unbound(다른화면의 데이터 변경)
 
@@ -38,11 +40,11 @@ const ItemDetail: NextPage = () => {
     <Layout goBackHandler>
       <div className={"px-4 py-4"}>
         <div className={"mb-8"}>
-          <img src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${data?.item.imageUrl}/public`} className={"h-96 bg-slate-300"} />
+        <div className="relative pb-80"><Image src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${data?.item.imageUrl}/public`} className={"h-96 bg-slate-300 object-cover"} fill alt="item"/></div>
           {/*user Profile*/}
           <div className={"flex py-3 border-t border-b items-center space-x-3"}>
             {/*user Avatar*/}
-            {user?.avatarUrl?<img src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${user.avatarUrl}/avatar`} className={"w-12 h-12 rounded-full bg-slate-300"}/> :<div className={"w-12 h-12 rounded-full bg-slate-300"} />}
+            <Image width={48} height={48} src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${data?.item?.user?.avatarUrl}/avatar`} className={"w-12 h-12 rounded-full bg-slate-300"} alt="avatar"/>
             <div>
               <p className={"text-sm font-medium text-gray-700"}>
                 {data?.item?.user?.name}

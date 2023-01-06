@@ -28,6 +28,8 @@ interface StreamResponseProps {
 }
 interface ChatFormProps {
   message: string;
+  cloudFlareId:string;
+
 }
 
 const StreamDetail: NextPage = () => {
@@ -75,13 +77,16 @@ const StreamDetail: NextPage = () => {
       return;
     }
   }, [data]);
+  console.log(data)
 
   return (
     <Layout goBackHandler title="온 라이브">
       <div className={"px-4 space-y-4"}>
-        <div
-          className={"w-full rounded-md shadow-sm bg-slate-300 aspect-video"}
-        />
+         {data?.stream.cloudFlareId? <iframe 
+          className="w-full aspect-video rounded-md shadow-sm"
+           src={`https://iframe.videodelivery.net/${data?.stream.cloudFlareId}`}
+           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"  
+           allowFullScreen={true}></iframe>:null}
         <div className="mt-5">
           <h1 className="text-2xl font-bold text-gray-900">
             {data?.stream.name}
@@ -90,6 +95,19 @@ const StreamDetail: NextPage = () => {
             {data?.stream.price}
           </span>
           <p className="my-3 text-gray-700">{data?.stream.description}</p>
+
+          <div className="bg-emerald-400 p-5 flex flex-col space-y-3 rounded-md overflow-scroll">
+            <span>스트리밍 키(보안요망)</span>
+            <span className="text-gray-600">
+              <span className="font-medium text-gray-800">URL : </span>
+              {data?.stream.cloudFlareUrl}
+            </span>
+            <span className="text-gray-600">
+              <span className="font-medium text-gray-800">Key : </span>
+              {data?.stream.cloudFlareKey}
+            </span>
+          </div>
+          
         </div>
         <div>
           <h2 className="text-md font-bold text-gray-900"> 🔴 라이브 채팅</h2>
