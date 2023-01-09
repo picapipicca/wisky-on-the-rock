@@ -5,8 +5,9 @@ import ItemLayout from "@components/item";
 import useUser from "@libraries/client/useUser";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Item } from "@prisma/client";
+import client from "@libraries/server/client";
 
 export interface ItemResponseWithLikeProps extends Item {
   _count: {
@@ -24,20 +25,22 @@ const Home: NextPage = () => {
   const { data } = useSWR<itemResponseTypeProps>("/api/items");
 
   return (
-    <Layout title="홈" isTabBar>
+    <Layout title="홈" isTabBar seoTitle="당신곁의 친구">
       <Head>
         <title>Home</title>
       </Head>
       <div className={"flex flex-col space-y-1 divide-y-[1px]"}>
-        {data?.items?.map((item) => (
-          <ItemLayout
-            key={item.id}
-            title={item.name}
-            price={item.price}
-            id={item.id}
-            likeNum={item?._count.likes}
-          />
-        ))}
+        {data
+          ? data?.items?.map((item) => (
+              <ItemLayout
+                key={item.id}
+                title={item.name}
+                price={item.price}
+                id={item.id}
+                likeNum={item?._count?.likes}
+              />
+            ))
+          : "Loading..."}
         <Button
           buttonType={"float"}
           clickHandler={() => {
@@ -65,4 +68,29 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+const Page: NextPage<{items:ItemResponseWithLikeProps[]}> = ({items}) => {
+  return (
+      <SWRConfig value={{
+        fallback:{
+          "/api/items" :{
+            ok:true,
+            items,
+          }
+        }
+      }}>
+        <Home />
+      </SWRConfig>
+    );
+};
+
+export async function getServerSideProps() {
+  const items = await client.item.findMany({});
+
+  return {
+    props: {
+      //여기의 데이터가 컴포넌트 안의 prop으로 제공됨
+      items:JSON.parse(JSON.stringify(items)),
+    },
+  };
+}
+export default Page;
