@@ -22,7 +22,7 @@ const Streams: NextPage = () => {
   }, [data]);
   
   return (
-    <Layout title={"라이브"} isTabBar>
+    <Layout seoTitle="실시간 영상"  title={"라이브"} isTabBar>
       <div className={"space-y-4 divide-y-2 pb-4"}>
         {data?.streams?.map((stream) => (
           <Link legacyBehavior href={`/stream/${stream.id}`} key={stream.id}>

@@ -6,6 +6,7 @@ import Layout from "@components/layout/layout";
 import useMutation from "@libraries/client/useMutation";
 import { useRouter } from "next/router";
 import { Item } from "@prisma/client";
+import Image from "next/image";
 
 interface createItemMutationProps {
   ok: boolean;
@@ -57,10 +58,10 @@ useEffect(()=>{
   }, [data, router]);
 
   return (
-    <Layout goBackHandler title="업로드">
+    <Layout seoTitle="제품 등록" goBackHandler title="업로드">
       <form onSubmit={handleSubmit(onValid)} className={"px-4 space-y-5 py-10"}>
         <div>
-         {itemPhotoPreview ? <img src={itemPhotoPreview} className={
+         {itemPhotoPreview ? <Image src={itemPhotoPreview} alt="img preview" className={
               "w-full h-48 rounded-md mb-3 text-gray-600 "
             }/> : 
          <label

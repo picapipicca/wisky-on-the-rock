@@ -85,7 +85,7 @@ const EditProfile: NextPage = () => {
   },[avatarUrl])
 
   return (
-    <Layout goBackHandler>
+    <Layout seoTitle="프로필 편집" goBackHandler>
       <form onSubmit={handleSubmit(onValid)} className={"px-4 space-y-4"}>
         <div className={"flex items-center space-x-6"}>
           {previewAvatar ? <img src={previewAvatar} className={"w-20 h-20 rounded-full bg-slate-200"} /> :<div className={"w-20 h-20 rounded-full bg-slate-200"} /> }

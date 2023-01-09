@@ -1,10 +1,12 @@
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import Layout from "@components/layout/layout";
 import Link from "next/link";
 import useUser from "@libraries/client/useUser";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Review, User } from "@prisma/client";
 import { cls } from "@libraries/client/utils";
+import { withSsrSession } from "@libraries/server/sessionLayout";
+import client from "@libraries/server/client";
 
 interface UserWithReviewProps extends Review {
   writtenBy: User;
@@ -22,10 +24,17 @@ const Profile: NextPage = () => {
   if (!user) return null;
 
   return (
-    <Layout title={"프로필"} isTabBar>
+    <Layout seoTitle="내 프로필" title={"프로필"} isTabBar>
       <div className="px-4">
         <div className={"flex items-center space-x-4"}>
-         {user?.avatarUrl? <img src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${user.avatarUrl}/avatar`} className={"w-16 h-16 bg-slate-300 rounded-full"} />:<div className={"w-16 h-16 bg-slate-300 rounded-full"}/>}
+          {user?.avatarUrl ? (
+            <img
+              src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${user.avatarUrl}/avatar`}
+              className={"w-16 h-16 bg-slate-300 rounded-full"}
+            />
+          ) : (
+            <div className={"w-16 h-16 bg-slate-300 rounded-full"} />
+          )}
           <div className={"flex flex-col"}>
             <span className={"font-medium text-gray-900"}>{user?.name}</span>
             <Link legacyBehavior href="/profile/edit">
@@ -155,4 +164,33 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+const Page: NextPage<{ profile: User }> = ({ profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/profile": {
+            ok: true,
+            profile,
+          },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
+
+export const getServerSideProps = withSsrSession(async function ({
+  req,
+}: NextPageContext) {
+  const profile = await client.user.findUnique({
+    where: { id: req?.session.user?.id },
+  });
+  return {
+    props: {
+      profile:JSON.parse(JSON.stringify(profile)),
+    },
+  };
+});
+export default Page;

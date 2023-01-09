@@ -37,7 +37,7 @@ const ItemDetail: NextPage = () => {
     toggleLike({});
   };
   return (
-    <Layout goBackHandler>
+    <Layout goBackHandler seoTitle="상품 상세">
       <div className={"px-4 py-4"}>
         <div className={"mb-8"}>
         <div className="relative pb-80"><Image src={`https://imagedelivery.net/zhbr1LNZLH9IvC2xyaJjWQ/${data?.item.imageUrl}/public`} className={"h-96 bg-slate-300 object-cover"} fill alt="item"/></div>
@@ -127,7 +127,7 @@ const ItemDetail: NextPage = () => {
           <h2 className={"text-2xl font-bold text-gray-900"}>비슷한 상품</h2>
           <div className={"mt-6 grid grid-cols-2 gap-4"}>
             {data?.relatedItems?.map((item) => (
-              <Link legacyBehavior key={item.id} href={`/items/${item.id}`}>
+              <Link legacyBehavior key={item.id} href={`/item/${item.id}`}>
                 <div key={item.id}>
                   <div className={"h-56 mb-4 w-full bg-slate-300"} />
                   <h3 className={"text-gray-700 -mb-1"}>{item.name}</h3>

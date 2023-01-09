@@ -39,7 +39,7 @@ const Create: NextPage = () => {
   }, [data, router]);
 
   return (
-    <Layout goBackHandler title="당신이 궁금한 동네생활은 무엇인가요?">
+    <Layout seoTitle="커뮤니티 질문" goBackHandler title="당신이 궁금한 동네생활은 무엇인가요?">
       <form
         onSubmit={handleSubmit(onValid)}
         className={"px-4 flex flex-col space-y-3"}

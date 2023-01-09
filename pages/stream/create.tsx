@@ -31,7 +31,7 @@ const StreamCreate: NextPage = () => {
     }
   },[data,router])
   return (
-    <Layout goBackHandler title="라이브">
+    <Layout seoTitle="실시간 영상 등록" goBackHandler title="라이브">
       <form onSubmit={handleSubmit(onValid)}>
         <div className={"px-4 space-y-5"}>
           <Input

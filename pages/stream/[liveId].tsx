@@ -80,7 +80,7 @@ const StreamDetail: NextPage = () => {
   console.log(data)
 
   return (
-    <Layout goBackHandler title="온 라이브">
+    <Layout seoTitle="실시간 영상 상세" goBackHandler title="온 라이브">
       <div className={"px-4 space-y-4"}>
          {data?.stream.cloudFlareId? <iframe 
           className="w-full aspect-video rounded-md shadow-sm"

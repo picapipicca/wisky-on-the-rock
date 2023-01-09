@@ -4,7 +4,7 @@ import Message from "@components/message";
 
 const ChatDetail: NextPage = () => {
     return (
-        <Layout goBackHandler>
+        <Layout seoTitle="채팅 상세" goBackHandler>
             <div className={"px-4 pb-16 space-y-4"}>
                 <Message message={"안녕하세요 아직 판매 하시나요?"}/>
                 <Message message={"넹 이만원이요"} reversed/>
