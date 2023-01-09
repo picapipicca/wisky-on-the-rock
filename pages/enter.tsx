@@ -1,10 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { NextPage } from "next";
 import { Input, Button } from "@components/atom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useMutation from "@libraries/client/useMutation";
 import { cls } from "@libraries/client/utils";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+
+// const DynamicButton = dynamic(() => import("@components/atom/avatar"), {ssr:false});
+// const Bs = dynamic(
+//   () =>
+//     new Promise((resolve) =>
+//       setTimeout(() => resolve(import("@components/atom/button")), 10000)
+//     ),{ ssr: false, suspense: true }
+//   //다이나믹으로 엄청 큰 컴포넌트 처리할때 로딩화면 보여주는 방법 
+//   //1. suspense에서 loader component 불러오는방법  { ssr: false, suspense: true }
+//   //2. dynamic 함수에서 처리하는 방법 { ssr: false, loading: ()=> <span>loading...</span> }
+// );
 
 interface LoginForm {
   email?: string;
@@ -119,6 +131,9 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === "phoneNum" ? (
+                // <Suspense fallback={<button>로딩중~</button>}>
+                //   <Bs/>
+                // </Suspense>
                 <Input
                   register={register("phoneNum", {
                     required: "필수 입력칸 입니다",
