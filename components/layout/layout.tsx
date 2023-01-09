@@ -2,21 +2,28 @@ import React,{ReactNode} from "react";
 import {cls} from "@libraries/client/utils";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import Head from "next/head";
 
 interface LayoutProps {
     children: ReactNode;
     title?: string;
     goBackHandler?: boolean;
     isTabBar?: boolean;
+    seoTitle:string;
 }
 
-const Layout = ({children, title, goBackHandler, isTabBar}: LayoutProps) => {
+const Layout = ({children, title, goBackHandler, isTabBar,seoTitle}: LayoutProps) => {
     const router = useRouter();
     const pageBack = () => {
         router.back();
     }
     return (
         <div>
+            <Head>
+                <title>
+                    {seoTitle} | Wisky On The Rock
+                </title>
+            </Head>
             <div className="bg-white w-full h-12 max-w-xl justify-center text-lg px-10 font-medium  fixed text-gray-800 border-b top-0 flex items-center">
                 {goBackHandler ? (
                     <button onClick={pageBack} className="absolute left-4">
