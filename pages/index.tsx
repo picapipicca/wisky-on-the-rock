@@ -30,8 +30,7 @@ const Home: NextPage = () => {
         <title>Home</title>
       </Head>
       <div className={"flex flex-col space-y-1 divide-y-[1px]"}>
-        {data
-          ? data?.items?.map((item) => (
+        {data?.items?.map((item) => (
               <ItemLayout
                 key={item.id}
                 title={item.name}
@@ -39,8 +38,7 @@ const Home: NextPage = () => {
                 id={item.id}
                 likeNum={item?._count?.likes}
               />
-            ))
-          : "Loading..."}
+            ))}
         <Button
           buttonType={"float"}
           clickHandler={() => {
@@ -71,8 +69,10 @@ const Home: NextPage = () => {
 const Page: NextPage<{items:ItemResponseWithLikeProps[]}> = ({items}) => {
   return (
       <SWRConfig value={{
+        //cache 초기값 설정
         fallback:{
           "/api/items" :{
+            //데이터 구조 똑같이 맞춰주기
             ok:true,
             items,
           }
@@ -88,7 +88,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      //여기의 데이터가 컴포넌트 안의 prop으로 제공됨
+      //여기의 데이터가 Page 컴포넌트 안의 prop으로 제공됨
       items:JSON.parse(JSON.stringify(items)),
     },
   };
